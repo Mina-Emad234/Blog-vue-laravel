@@ -6,7 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\categoryController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,10 +23,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/categories/{category}/posts',[categoryController::class,'categoryPost']);
+Route::get('/categories/{category:slug}/posts',[CategoryController::class,'categoryPost']);
 Route::get('/search_posts/{query}',[PostController::class,'searchPosts']);
 Route::apiResource('/posts',PostController::class);
-Route::apiResource('/categories',categoryController::class);
+Route::apiResource('/categories',CategoryController::class);
 Route::post('login', [UserController::class,'login']);
 Route::post('register', [UserController::class,'register']);
 

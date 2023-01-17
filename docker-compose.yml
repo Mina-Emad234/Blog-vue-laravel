@@ -57,10 +57,10 @@ services:
       - app-network
 
   npm:
-    image: node:current-alpine
+    image: node:latest
     container_name: npm
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     user: node
     entrypoint: ["npm"]
     working_dir: /var/www/html
