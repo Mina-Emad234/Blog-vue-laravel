@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: cloudsigma.com/php
     container_name: app
     restart: unless-stopped
     tty: true
@@ -14,14 +15,12 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www/html/
     command: "php artisan serve --host=0.0.0.0 --port=8000"
-    ports:
-        - 8000:8000
     volumes:
       - ./:/var/www/html/
       - ./php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
     networks:
       - app-network
-
+      
   #Nginx Service
   webserver:
     image: nginx:alpine

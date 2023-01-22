@@ -1,4 +1,4 @@
-FROM php:8.1.0
+FROM php:8.1-fpm
 
 # Copy composer.lock and composer.json into the working directory
 COPY composer.lock composer.json /var/www/html/
@@ -43,8 +43,9 @@ RUN chown -R www-data:www-data \
 
 # Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
 EXPOSE 9000
+CMD ["php-fpm"]
 
-CMD php artisan serve --host 0.0.0.0 --port=8000
+
 
 
 
