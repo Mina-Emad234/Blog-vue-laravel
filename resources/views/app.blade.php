@@ -57,7 +57,7 @@
                 $('#register-modal').modal('show');
             })
         })
-   
+
 
     </script>
 

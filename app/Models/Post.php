@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+
 
 class Post extends Model
 {
@@ -16,12 +18,12 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -30,7 +32,12 @@ class Post extends Model
     public function createdAt(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => $value->diffForHumans(),
+            get: fn ($value) => Carbon::parse($value)->diffForHumans(),
         );
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

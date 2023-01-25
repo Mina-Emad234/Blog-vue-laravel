@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Carbon\Carbon;
+
 
 class Comment extends Model
 {
@@ -16,7 +18,7 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function post()
     {
         return $this->belongsTo(Post::class);
@@ -25,7 +27,7 @@ class Comment extends Model
     public function createdAt(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => $value->diffForHumans(),
+            get: fn ($value) => Carbon::parse($value)->diffForHumans(),
         );
     }
 }

@@ -1,7 +1,6 @@
 <template>
 <home />
 </template>
-
 <script>
 import Home from './components/front/Home.vue'
 export default {
