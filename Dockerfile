@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1.0
 
 # Copy composer.lock and composer.json into the working directory
 COPY composer.lock composer.json /var/www/html/
@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     libonig-dev \
+    libxml2-dev \
     curl
 
 # Clear cache
@@ -40,15 +41,3 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data \
         /var/www/html/storage \
         /var/www/html/bootstrap/cache
-
-# Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
-EXPOSE 9000
-CMD ["php-fpm"]
-
-
-
-
-
-
-
-

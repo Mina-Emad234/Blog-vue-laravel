@@ -57,9 +57,7 @@
 </template>
 
 <script>
-import axios from "axios";
 import Categories from "./Categories.vue";
-import { json } from "body-parser";
 
 export default {
   components: { Categories },

@@ -44,7 +44,6 @@
         </div>
     </div>
 </template>
-
 <script>
 import Categories from "./Categories.vue";
 

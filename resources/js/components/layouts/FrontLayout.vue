@@ -83,11 +83,10 @@
   <Login></Login>
   <!--modals-->
 </template>
-
 <script>
 import Register from '../front/Register.vue';
 import Login from '../front/Login.vue';
-export default { 
+export default {
     components: { Register, Login },
     computed:{
     isLogged(){

@@ -1,19 +1,18 @@
 <template>
-  <front-layout>
-    <template v-slot:pageContent>
-      <div class="container intro-container">
-           <router-view></router-view>
-        <!-- <div class="row"> -->
-          <!-- Blog Entries Column -->
-          <!-- <div class="col-md-8">
+    <front-layout>
+        <template v-slot:pageContent>
+            <div class="container intro-container">
+                <router-view></router-view>
+                <!-- <div class="row"> -->
+                <!-- Blog Entries Column -->
+                <!-- <div class="col-md-8">
             <h1 class="my-4">
               Page Heading
               <small>Secondary Text</small>
             </h1> -->
 
-
-            <!-- Pagination -->
-            <!-- <nav aria-label="...">
+                <!-- Pagination -->
+                <!-- <nav aria-label="...">
               <ul class="pagination float-right">
                 <li class="page-item disabled">
                   <span class="page-link">Previous</span>
@@ -32,42 +31,37 @@
               </ul>
             </nav>
           </div> -->
-          <!-- Sidebar Widgets Column -->
+                <!-- Sidebar Widgets Column -->
 
-        <!-- </div> -->
-        <!-- /.row -->
-      </div>
-      <!-- /.container -->
-    </template>
-  </front-layout>
+                <!-- </div> -->
+                <!-- /.row -->
+            </div>
+            <!-- /.container -->
+        </template>
+    </front-layout>
 </template>
 
 <script>
-import axios from 'axios';
 import FrontLayout from "../layouts/FrontLayout.vue";
 export default {
-  components: { FrontLayout },
-  created() {
-    this.updateToken();
-    this.setUser();
-  },
-  methods: {
- 
-    updateToken(){
-        var token = JSON.parse(localStorage.getItem('userToken'));
-        this.$store.commit('SET_USER_TOKEN',token);
+    components: { FrontLayout },
+    created() {
+        this.updateToken();
+        this.setUser();
     },
-    setUser(){
-        setUsre(){
-            axios.get('/api/user')
-            .then(res=>{
-                this.$store.commit("SET_USER",res.data.user)
-            })
-        }
-    }
-  },
+    methods: {
+        updateToken() {
+            var token = JSON.parse(localStorage.getItem("userToken"));
+            this.$store.commit("SET_USER_TOKEN", token);
+        },
+        setUser() {
+            axios.get("/api/user").then((res) => {
+                this.$store.commit("SET_USER", res.data.user);
+            });
+        },
+    },
 };
+
 </script>
 
-<style>
-</style>
+<style></style>
