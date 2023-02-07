@@ -1,10 +1,10 @@
 <template>
-<home />
+    <home></home>
 </template>
 <script>
 import Home from './components/front/Home.vue'
 export default {
-  components: { Home },
+  components: { Home }
 
 }
 </script>

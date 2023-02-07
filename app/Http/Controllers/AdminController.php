@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -16,11 +18,11 @@ class AdminController extends Controller
 
     public function getPosts()
     {
-        $posts = Post::latest()->with(['user','category'])->withCount('comments')->paginate(10);
+        $posts = Post::latest()->with(['user','category'])->withCount('comments')->paginate(5);
         return response()->json($posts);
     }
 
-    public function index()
+    public function getCategories()
     {
         $categories = Category::all();
         return response()->json($categories);
@@ -32,7 +34,7 @@ class AdminController extends Controller
             'title'=>$request->title,
             'slug'=>Str::slug($request->title),
             'body'=>$request->body,
-            'category'=>$request->category,
+            'category_id'=>$request->category,
             'image'=>$request->image,
             'user_id'=>Auth::user()->id,
         ]);
@@ -43,14 +45,14 @@ class AdminController extends Controller
     public function updatePost(Request $request)
     {
         $post = Post::find($request->id);
-        if ($post && !empty($request->image)) {
+        if ($post && !empty($request->image) && File::exists($post->image)) {
             unlink($post->image);
         }
         $post->Update([
             'title'=>$request->title,
             'slug'=>Str::slug($request->title),
             'body'=>$request->body,
-            'category'=>$request->category,
+            'category_id'=>$request->category,
             'image'=>$request->image,
             'user_id'=>Auth::user()->id,
         ]);
@@ -58,11 +60,27 @@ class AdminController extends Controller
         return response()->json($post);
     }
 
-    public function deletePost(Request $request)
+    public function deletePosts(Request $request)
     {
-        Post::whereIn('id',$request->post_ids)->delete();
+        $posts = Post::whereIn('id',$request->posts_ids)->get();
+        foreach ( $posts as $post) {
+            $post->delete();
+            if ($post && File::exists($post->image)) {
+                unlink($post->image);
+            }
+        }
         return response()->json(['message'=>'deleted']);
     }
+    public function deletePost(Request $request)
+        {
+            $post = Post::where('slug',$request->slug)->firstOrFail();
+                $post->delete();
+                if ($post && File::exists($post->image)) {
+                    unlink($post->image);
+                }
+
+            return response()->json(['message'=>'post deleted']);
+        }
 
 
 }

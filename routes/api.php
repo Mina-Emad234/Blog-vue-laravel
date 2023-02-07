@@ -31,7 +31,7 @@ Route::post('login', [UserController::class,'login']);
 Route::post('register', [UserController::class,'register']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('user', [UserController::class,'detaiis']);
+    Route::get('user', [UserController::class,'details']);
     Route::post('comment/create', [CommentController::class,'store']);
 });
 Route::prefix("/admin")->middleware('auth:api')->group(function () {
@@ -39,5 +39,6 @@ Route::prefix("/admin")->middleware('auth:api')->group(function () {
     Route::post('posts/add', [AdminController::class,'addPost']);
     Route::post('posts/update', [AdminController::class,'updatePost']);
     Route::get('categories', [AdminController::class,'getCategories']);
-    Route::get('posts/delete', [AdminController::class,'deletePosts']);
+    Route::post('posts/delete', [AdminController::class,'deletePosts']);
+    Route::post('post/delete', [AdminController::class,'deletePost']);
 });

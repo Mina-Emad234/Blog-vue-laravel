@@ -29,7 +29,7 @@
           </ul>
         </div>
       </div>
-      <Pagination :data="posts" @pagination-change-page="getPosts"></Pagination>
+      <Bootstrap4Pagination :data="posts" @pagination-change-page="getPosts"></Bootstrap4Pagination>
     </div>
 
     <div class="col-md-4">
@@ -55,12 +55,13 @@
     </div>
   </div>
 </template>
-
 <script>
 import Categories from "./Categories.vue";
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
+
 
 export default {
-  components: { Categories },
+  components: { Categories,Bootstrap4Pagination },
   data() {
     return {
       posts: {},

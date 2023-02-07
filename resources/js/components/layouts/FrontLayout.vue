@@ -2,7 +2,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">Ayat Amine</a>
+      <a class="navbar-brand" href="#"></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,8 +16,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <router-link v-if="isAdmin" class="nav-link" to="/admin">Admin
+          <li class="nav-item active" v-show="isAdmin && isLogged" >
+            <router-link class="nav-link" to="/admin">Admin
               <span class="sr-only">(current)</span>
             </router-link>
           </li>

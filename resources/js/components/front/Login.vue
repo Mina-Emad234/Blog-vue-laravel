@@ -1,6 +1,6 @@
 <template>
     <!--login-->
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade modal-backdrop-login" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -74,6 +74,8 @@ export default {
             Data.append('email', this.email);
             Data.append('password', this.password);
             this.$store.dispatch('loginUser',Data);
+            $("#login-modal").modal('hide');
+            $(".modal-backdrop-login").css('display',"none");
         },
     },
 }

@@ -55,7 +55,7 @@
     <div class="media mb-4" v-for="comment in post.comments" :key="comment.id">
       <img
         class="d-flex mr-3 rounded-circle"
-        :src="comment.user.profile_img"
+        :src="`${comment.user.profile_img}`"
         :alt="comment.user.name"
         width="50" height="50"
         />
@@ -96,7 +96,8 @@ export default {
         let {body,post_id} = this;
         axios.post(`/api/comment/create`,{body,post_id})
         .then(res => {
-            console.log(res.data);
+            this.comments.push(res.data);
+            this.body='';
         })
         .catch(err => console.log(err));
     },

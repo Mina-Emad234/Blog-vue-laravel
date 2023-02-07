@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->with('user')->withCount('comments')->paginate(10);
+        $posts = Post::latest()->with('user')->withCount('comments')->paginate(5);
         return response()->json($posts);
     }
 
@@ -76,7 +76,7 @@ class PostController extends Controller
 
     public function searchPosts($query)
     {
-        $posts = Post::latest()->with('user')->withCount('comments')->where('title','like',"%$query%")->get();
+        $posts = Post::latest()->with('user')->withCount('comments')->where('title','like',"%$query%")->paginate(5);
         return response()->json($posts);
     }
 }

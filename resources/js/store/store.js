@@ -50,7 +50,8 @@ const actions = {
             commit([types.SET_USER_TOKEN],res.data.token);
             axios.get('api/user')
             .then((res)=>{
-                console.log(err.data);
+                commit([types.SET_USER],res.data.user);
+                // console.log(res.data.user);
             })
         })
         .catch((err)=>{
@@ -70,10 +71,18 @@ const store = createStore({
     actions,
     getters: {
         isLogged(state){
-            return !!state.userToken;
+            if (state.user!=null) {
+                return !!state.userToken;
+            }else{
+                return false;
+            }
         },
         isAdmin(state){
-            return state.user.is_admin;
+            if (state.user!=null) {
+                return state.user!=null && state.user.is_admin?true:false;
+            }else{
+                return false;
+            }
         },
         postToEdit(state){
             return state.editedPost;

@@ -55,9 +55,14 @@ export default {
             this.$store.commit("SET_USER_TOKEN", token);
         },
         setUser() {
-            axios.get("/api/user").then((res) => {
-                this.$store.commit("SET_USER", res.data.user);
-            });
+            if (this.$store.state.user == null) {
+                axios.get("/api/user").then((res) => {
+                    this.$store.commit("SET_USER", res.data.user);
+                })
+            }else{
+                this.$store.commit("SET_USER", null);
+            }
+
         },
     },
 };

@@ -12,9 +12,9 @@
                                     class="material-icons">&#xE147;</i>
                                 <span>Add New Post</span></a>
 
-                            <a href="#deletePostModal" v-if="selectedPosts.length" class="btn btn-danger"
+                            <a href="#deletePostModal" v-if="selectedPosts?.length" class="btn btn-danger"
                                 data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
-                            <a href="#deletePostModalnopost" v-if="!selectedPosts.length" class="btn btn-danger"
+                            <a href="#deletePostModalnopost" v-if="!selectedPosts?.length" class="btn btn-danger"
                                 data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="posts.data.length">
+                    <tbody v-if="posts.data?.length">
                         <tr v-for="(post,index) in posts.data" :key="index">
                             <td>
                                 <span class="custom-checkbox">
@@ -55,21 +55,18 @@
                             </td>
                             <td>{{post.user.name}}</td>
                             <td>
-                                <a href="#editPostModal" class="edit" @click="editPost(post,$event)"
-                                data-toggle="modal"><i class="material-icons"
-                                        data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a href="#deletePostModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                <a href='#editPostModal' class="edit" @click="editPost(post,$event)"
+                                data-toggle="modal"><i class="material-icons" title="Edit">&#xE254;</i></a>
+                                <a href="#deleteOnePostModal" class="delete" @click="getPost(post,$event)"
+                                 data-toggle="modal"><i class="material-icons"
                                         data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                                <router-link :to="'/post/' + post.slug" class="" target="_blank"><i
-                                        class="material-icons" data-toggle="tooltip" title="Delete">&#128065;</i>
-                                </router-link>
+
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <Pagination :data="posts" @pagination-change-page="getPosts"></Pagination>
+                    <Bootstrap4Pagination :data="posts" @pagination-change-page="getPosts"></Bootstrap4Pagination>
                 </div>
             </div>
         </div>
@@ -97,23 +94,24 @@
                                 <label>category</label>
                                 <select name="" class="form-control" v-model="category">
                                     <option disabled selected>choose category</option>
-                                    <option v-fot="category in categories" :key="category.id">{{category.name}}</option>
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">{{category.name}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>image</label>
-                                <input type="file" class="form-control" required @change="onImageChanged()" />
+                                <input type="file" id="add_file" :key="Math.random()" class="form-control" required @change="onImageChanged()" />
                             </div>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
-                            <input type="submit" class="btn btn-success" value="Add" @click.prevent="addPost" />
+                            <input type="button" class="btn btn-success" value="Add" @click.prevent="addPost" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <editpost></editpost>
+        <EditPost></EditPost>
+
         <!-- Delete Modal HTML -->
         <div id="deletePostModal" class="modal fade">
             <div class="modal-dialog">
@@ -128,15 +126,37 @@
                         <div class="modal-body">
                             <p>Are you sure you want to delete these Records?</p>
                             <p class="text-warning">
-                                <small>This action cannot be undone.</small>
-                            </p>
-                            <p class="text-warning">
-                                <small>Selected Posts : <strong>{{ selectedPosts.length }}</strong></small>
+                                <small>Selected Posts : <strong>{{ selectedPosts?.length }}</strong></small>
                             </p>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
-                            <input type="submit" class="btn btn-danger" @click="deletePosts" value="Delete" />
+                            <input type="button" class="btn btn-danger" @click="deletePosts" value="Delete" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Delete Modal HTML -->
+        <div id="deleteOnePostModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Post</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this post?</p>
+                            <p class="text-warning">
+                                <small><strong>{{ postToDelete.title }}</strong></small>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                            <input type="button" class="btn btn-danger" @click="deletePosts" value="Delete" />
                         </div>
                     </form>
                 </div>
@@ -169,8 +189,9 @@
 
 <script>
 import EditPost from "./EditPost.vue"
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 export default {
-    components: { EditPost },
+    components: { EditPost,Bootstrap4Pagination },
     data(){
         return{
             posts:[],
@@ -178,6 +199,7 @@ export default {
             body:"",
             image:"",
             category:"",
+            postToDelete:"",
             categories:[],
             selectedPosts : [],
         }
@@ -191,7 +213,7 @@ export default {
         axios
             .get(`/api/admin/posts?page=${page}`)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 this.posts = res.data;
                 localStorage.setItem("posts",JSON.stringify(this.posts));
             })
@@ -201,14 +223,13 @@ export default {
         axios
             .get(`/api/admin/categories`)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 this.categories = res.data;
             })
             .catch((err) => console.log(err));
         },
-        onImageChanged(event){
-            console.log(event.target.files[0]);
-            this.image = event.target.files[0];
+        onImageChanged(){
+            this.image = document.getElementById('add_file').files[0];
         },
         addPost(){
             let config = {
@@ -227,6 +248,7 @@ export default {
                 this.body='';
                 this.image='';
                 this.category='';
+                this.getPosts();
                 $("#addPostModal").modal('hide');
                 $(".modal-backdrop").css('display',"none");
             })
@@ -235,21 +257,20 @@ export default {
             this.$store.commit("EDIT_POST",post)
         },
         selectPost(post,event){
-            let index = this.selectedPosts.indexOf(post,id)
+            let index = this.selectedPosts.indexOf(post.id)
             if (index > -1) {
                 this.selectedPosts.splice(index,1)
                 event.target.checked = false; //unchecked
             } else {
-                this.selectedPosts.push(post,id)
+                this.selectedPosts.push(post.id)
                 event.target.checked = true; //checked
             }
         },
         selectAll(event){
-            let index = this.selectedPosts.indexOf(post,id)
             if (event.target.checked) {
                 $('input[type="checkbox"]').prop('checked',true);
                 this.posts.data.forEach(p => {
-                    this.selectedPosts.push(p,id)
+                    this.selectedPosts.push(p.id)
                 });
             } else {
                 $('input[type="checkbox"]').prop('checked',false);
@@ -257,17 +278,29 @@ export default {
             }
         },
         deletePosts(){
-            axios.get(`/api/admin/posts/delete`,{posts_ids:this.selectedPosts})
+            axios.post(`/api/admin/posts/delete`,{posts_ids:this.selectedPosts})
                 .then((res) => {
-                    console.log(res.data);
-                    $('#deletePostModal').modal(hide)
-                    $(".modal-backdrop").css('display',"none");
                     this.getPosts();
+                    $('#deletePostModal').modal('hide')
+                    $(".modal-backdrop").css('display',"none");
                     $('input[type="checkbox"]').prop('checked',false);
                 })
                 .catch((err) => console.log(err));
         },
+        getPost(post){
+            this.postToDelete=post
+        },
+        deletePosts(){
+            axios.post(`/api/admin/post/delete`,{slug:this.postToDelete.slug})
+                .then((res) => {
+                    this.getPosts();
+                    $('#deleteOnePostModal').modal('hide')
+                    $(".modal-backdrop").css('display',"none");
+                })
+                .catch((err) => console.log(err));
+        },
     },
+
 };
 $(document).ready(function () {
     // Activate tooltip
