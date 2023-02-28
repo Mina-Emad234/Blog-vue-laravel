@@ -52,7 +52,7 @@
     </div>
 
     <!-- Single Comment -->
-    <div class="media mb-4" v-for="comment in post.comments" :key="comment.id">
+    <div class="media mb-4 comment" v-for='comment in post.comments' :key="comment.id">
       <img
         class="d-flex mr-3 rounded-circle"
         :src="`${comment.user.profile_img}`"
@@ -87,8 +87,9 @@ export default {
         .get(`/api/posts/${this.$route.params.slug}`)
         .then(res => {
             this.post = res.data
-            this.post_id = this.post.id,
+            this.post_id = this.post.id
             this.comments = this.post.comments
+            this.initializeListener()
         })
         .catch(err => console.log(err));
     },
@@ -105,6 +106,18 @@ export default {
         var token = JSON.parse(localStorage.getItem('userToken'));
         this.$store.commit('SET_USER_TOKEN',token);
     },
+    initializeListener(){
+        Echo.private(`newComment.${this.post_id}`)
+        .listen('newComment',(e)=>{
+            console.log(e);
+            this.comments.unshift(e.comment)
+            this.querySelectorAll('.comment').forEach(item=>{
+                item.classList.remove('new')
+            })
+            this.querySelectorAll('.comment')[0].classList.add('new')
+            console.log('listen to new comment event');
+        })
+    }
   },
   computed:{
     isLogged(){
@@ -114,5 +127,19 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.comment{
+    padding:0.5rem;
+    background: #fff;
+}
+.comment.new{
+    background-color: #fff;
+    animation-name: newComment;
+    animation-direction: 6s;
+    animation-iteration-count: 1;
+}
+@keyframes newComment {
+    from{background-color: rgb(241, 245, 24);}
+    to{background-color: inherit;}
+}
 </style>

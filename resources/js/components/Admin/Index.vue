@@ -205,6 +205,7 @@ export default {
         }
     },
     created(){
+        this.checkAdmin();
         this.getPosts();
         this.getCategories();
     },
@@ -298,6 +299,11 @@ export default {
                     $(".modal-backdrop").css('display',"none");
                 })
                 .catch((err) => console.log(err));
+        },
+        checkAdmin(){
+             if(!this.$store.getters.isAdmin){
+                this.$router.push('/')
+             }
         },
     },
 

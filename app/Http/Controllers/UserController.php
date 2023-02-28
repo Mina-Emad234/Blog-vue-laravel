@@ -66,4 +66,23 @@ class UserController extends Controller
     {
         return response()->json(['user' => Auth::user()??null], 200);
     }
+
+    public function getUnreadNotifications()
+    {
+        $notifications = Auth::user()->unreadNotifications;
+        return response()->json($notifications);
+    }
+
+    public function getAllNotifications()
+    {
+        $notifications = Auth::user()->notifications;
+        return response()->json($notifications);
+    }
+
+    public function markNotificationAsRead(Request $request)
+    {
+        $notification = Auth::user()->notifications->where('id',$request->id)->first();
+        $notification->markAsRead();
+        return response()->json(['msg'=>'ok']);
+    }
 }

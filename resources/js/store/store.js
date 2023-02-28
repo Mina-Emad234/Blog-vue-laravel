@@ -22,6 +22,12 @@ const mutations = {
     },
     [types.SET_USER](state,user){
         state.user = user;
+        Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
+        Echo.private(`App.User.${state.user.id}`)
+            .notification((notification)=>{
+                console.log(notification);
+                state.notifications.unshift(notification)
+            })
     },
     [types.LOGOUT](state){
         state.userToken = null;
@@ -65,6 +71,7 @@ const store = createStore({
         userToken: null,
         user:null,
         editedPost:{},
+        notifications:[],
     },
 
     mutations,

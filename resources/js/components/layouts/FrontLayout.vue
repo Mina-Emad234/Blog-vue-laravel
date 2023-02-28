@@ -3,6 +3,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#"></a>
+      <Notification />
       <button
         class="navbar-toggler"
         type="button"
@@ -16,22 +17,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active" v-show="isAdmin && isLogged" >
+          <li class="nav-item" v-show="isAdmin && isLogged" >
             <router-link class="nav-link" to="/admin">Admin
               <span class="sr-only">(current)</span>
             </router-link>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item">
             <router-link class="nav-link" to="/">Home
               <span class="sr-only">(current)</span>
             </router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">blog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
-          </li>
+
 
           <li
             class="nav-item register-btn reg-login-btn"
@@ -86,8 +82,9 @@
 <script>
 import Register from '../front/Register.vue';
 import Login from '../front/Login.vue';
+import Notification from '../front/Notification.vue';
 export default {
-    components: { Register, Login },
+    components: { Register, Login, Notification },
     computed:{
     isLogged(){
         return this.$store.getters.isLogged

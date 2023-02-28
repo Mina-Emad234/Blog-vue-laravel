@@ -33,6 +33,9 @@ Route::post('register', [UserController::class,'register']);
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [UserController::class,'details']);
     Route::post('comment/create', [CommentController::class,'store']);
+    Route::get('unread-notifications', [UserController::class,'getUnreadNotifications']);
+    Route::get('notifications', [UserController::class,'getAllNotifications']);
+    Route::get('markNotificationAsRead', [UserController::class,'markNotificationAsRead']);
 });
 Route::prefix("/admin")->middleware('auth:api')->group(function () {
     Route::get('posts', [AdminController::class,'getPosts']);

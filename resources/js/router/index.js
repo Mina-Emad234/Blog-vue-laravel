@@ -3,6 +3,7 @@ import AllPosts from "../components/front/AllPosts.vue";
 import PostDetails from "../components/front/PostDetails.vue";
 import CategoryPosts from "../components/front/CategoryPosts.vue";
 import Admin from "../components/Admin/Index.vue";
+import AllNotifications from "../components/front/AllNotifications.vue";
 
 
 const routes = [
@@ -26,12 +27,19 @@ const routes = [
     name: 'Admin',
     component: Admin,
   },
+    {
+    path: '/Notifications',
+    name: 'Notifications',
+    component: AllNotifications,
+  },
 ];
 
 const router = createRouter({
   routes,
   mode: 'history',
   history: createWebHistory(),
+  linkActiveClass: "active",
+
 });
 
 export default router;
