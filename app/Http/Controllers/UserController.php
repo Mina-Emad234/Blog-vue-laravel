@@ -81,8 +81,7 @@ class UserController extends Controller
 
     public function markNotificationAsRead(Request $request)
     {
-        $notification = Auth::user()->notifications->where('id',$request->id)->first();
-        $notification->markAsRead();
+        $notification = Auth::user()->notifications->where('id',$request->id)->markAsRead();
         return response()->json(['msg'=>'ok']);
     }
 }

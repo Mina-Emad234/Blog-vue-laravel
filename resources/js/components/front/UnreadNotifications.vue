@@ -1,17 +1,16 @@
 <template>
-    <div class="dropdown">
-        <button class="dropbtn">
-      <i class="fa fa-bell"></i>
-<script src="https://code.jquery.com/jquery.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <div class="dropdown">
+
+      <!-- <script src="https://code.jquery.com/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+
+       <div class="dropdown">
     <button class="dropbtn">
       <i class="fa fa-bell"></i>
       <span class="badge badge-danger">{{notifications.length}}</span>
       <i class="fa fa-caret-down"></i>
     </button>
-        <div class="dropdown-content">
+        <div class="dropdown-content" @updateUnreadNotification="deleteNotification">
             <div class="media p-2" v-for="(n,i) in notifications" :key='i'>
                 <img class="mr-2" style="height: 60px;width: 60px;" :src="n.data.comment_owner.profile_img" alt="commenter image">
                 <div class="media-body">
@@ -47,11 +46,14 @@ export default {
         getUnreadNotifications(){
         axios.get(`api/unread-notifications`)
         .then(res => {
-            console.log(res)
             this.$store.state.notifications=res.data
         }).catch(err =>{ console.log(err)});
 
         },
+        deleteNotification(id){
+            console.log(id);
+            return this.getUnreadNotifications();
+        }
     }
 }
 </script>

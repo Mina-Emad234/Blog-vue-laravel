@@ -109,7 +109,7 @@ export default {
     initializeListener(){
         Echo.private(`newComment.${this.post_id}`)
         .listen('newComment',(e)=>{
-            console.log(e);
+            // console.log(e);
             this.comments.unshift(e.comment)
             this.querySelectorAll('.comment').forEach(item=>{
                 item.classList.remove('new')

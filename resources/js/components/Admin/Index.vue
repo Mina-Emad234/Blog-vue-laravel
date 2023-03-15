@@ -156,7 +156,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
-                            <input type="button" class="btn btn-danger" @click="deletePosts" value="Delete" />
+                            <input type="button" class="btn btn-danger" @click="deletePost" value="Delete" />
                         </div>
                     </form>
                 </div>
@@ -291,7 +291,7 @@ export default {
         getPost(post){
             this.postToDelete=post
         },
-        deletePosts(){
+        deletePost(){
             axios.post(`/api/admin/post/delete`,{slug:this.postToDelete.slug})
                 .then((res) => {
                     this.getPosts();

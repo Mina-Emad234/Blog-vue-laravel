@@ -22,7 +22,7 @@ const mutations = {
     },
     [types.SET_USER](state,user){
         state.user = user;
-        Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
+        // Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
         Echo.private(`App.User.${state.user.id}`)
             .notification((notification)=>{
                 console.log(notification);
@@ -44,6 +44,7 @@ const actions = {
     registerUser({commit},payload){
         axios.post(`/api/register`,payload)
         .then((res)=>{
+
             commit([types.SET_USER_TOKEN],res.data.token);
         })
         .catch((err)=>{

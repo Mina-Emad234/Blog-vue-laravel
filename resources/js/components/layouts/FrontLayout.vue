@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="#"></a>
-      <Notification />
+      <UnreadNotifications />
       <button
         class="navbar-toggler"
         type="button"
@@ -82,9 +82,9 @@
 <script>
 import Register from '../front/Register.vue';
 import Login from '../front/Login.vue';
-import Notification from '../front/Notification.vue';
+import UnreadNotifications from '../front/UnreadNotifications.vue';
 export default {
-    components: { Register, Login, Notification },
+    components: { Register, Login, UnreadNotifications },
     computed:{
     isLogged(){
         return this.$store.getters.isLogged

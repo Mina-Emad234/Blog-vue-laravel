@@ -21,6 +21,7 @@ use App\Http\Controllers\CategoryController;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+
 });
 
 Route::get('/categories/{category:slug}/posts',[CategoryController::class,'categoryPost']);
@@ -31,11 +32,12 @@ Route::post('login', [UserController::class,'login']);
 Route::post('register', [UserController::class,'register']);
 
 Route::middleware('auth:api')->group(function () {
+
     Route::get('user', [UserController::class,'details']);
     Route::post('comment/create', [CommentController::class,'store']);
     Route::get('unread-notifications', [UserController::class,'getUnreadNotifications']);
     Route::get('notifications', [UserController::class,'getAllNotifications']);
-    Route::get('markNotificationAsRead', [UserController::class,'markNotificationAsRead']);
+    Route::post('markNotificationAsRead', [UserController::class,'markNotificationAsRead']);
 });
 Route::prefix("/admin")->middleware('auth:api')->group(function () {
     Route::get('posts', [AdminController::class,'getPosts']);
@@ -45,3 +47,4 @@ Route::prefix("/admin")->middleware('auth:api')->group(function () {
     Route::post('posts/delete', [AdminController::class,'deletePosts']);
     Route::post('post/delete', [AdminController::class,'deletePost']);
 });
+

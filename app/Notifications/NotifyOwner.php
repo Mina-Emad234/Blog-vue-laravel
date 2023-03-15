@@ -73,9 +73,9 @@ class NotifyOwner extends Notification implements ShouldBroadcast
     {
         return new BroadcastMessage([
            'data'=> [
-            'comment_owner'=>$this->comment_owner,
-            'commented_at'=>$this->commented_at,
-            'post'=>$this->post,
+                'comment_owner'=>$this->comment_owner,
+                'commented_at'=>$this->commented_at,
+                'post'=>$this->post,
             ]
         ]);
     }

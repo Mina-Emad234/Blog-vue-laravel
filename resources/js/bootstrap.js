@@ -33,18 +33,31 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
+    // wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
+    // wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
+    // wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+    // forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
     encrypted:true,
-    host:window.location.hostname.':8000',
-    authEndpoint:"/api/broadcating/auth",
+    host:window.location.hostname+':8000',
+    // authEndpoint:"/api/broadcating/auth",
     csrfToken:token.content,
-    auth:{
-        headers: {
-            Authorization: JSON.parse(localStorage.getItem('userToken'))
-        }
-    }
+    // disableStats: true,
+    cluster:import.meta.env.VITE_PUSHER_APP_CLUSTER,//added this line
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                .then(response => {
+                    callback(null, response.data);
+                })
+                .catch(error => {
+                    callback(error);
+                });
+            }
+        };
+    },
 });

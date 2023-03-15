@@ -1,6 +1,6 @@
 <template>
     <!--register-->
-    <div class="modal fade modal-backdrop" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade modal-backdrop-login" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
