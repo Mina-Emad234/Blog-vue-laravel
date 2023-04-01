@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewComment;
-use App\Models\Comment;
 use App\Models\Post;
-use App\Notifications\NotifyOwner;
+use App\Models\Comment;
+use App\Events\NewComment;
 use Illuminate\Http\Request;
+use App\Notifications\NotifyOwner;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Broadcasting\PrivateChannel;
 
 class CommentController extends Controller
 {
+
     public function store(Request $request)
     {
         $comment = Comment::create([
@@ -20,10 +22,12 @@ class CommentController extends Controller
         ]);
         $comment->load('user');
         broadcast(new NewComment($comment->user,$comment))->toOthers();
-        $post = Post::find($request->post_id);
-        if ($post->user_id != $comment->user_id) {
-            $post->user->notify(new NotifyOwner($comment,$post));
+        $post = Post::find($comment->post_id);
+        $post_owner=$post->user;
+        if ($post_owner->id != $comment->user_id) {
+            $post_owner->notify(new NotifyOwner($comment, $post));
         }
+
         return response()->json([
             'id'=>$comment->id,
             'body'=>$comment->body,

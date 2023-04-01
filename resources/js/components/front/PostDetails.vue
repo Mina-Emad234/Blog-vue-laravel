@@ -89,7 +89,7 @@ export default {
             this.post = res.data
             this.post_id = this.post.id
             this.comments = this.post.comments
-            this.initializeListener()
+            this.initializeListener();
         })
         .catch(err => console.log(err));
     },
@@ -97,10 +97,12 @@ export default {
         let {body,post_id} = this;
         axios.post(`/api/comment/create`,{body,post_id})
         .then(res => {
-            this.comments.push(res.data);
+            this.comments.unshift(res.data);
             this.body='';
+
         })
         .catch(err => console.log(err));
+
     },
     updateToken(){
         var token = JSON.parse(localStorage.getItem('userToken'));
@@ -108,14 +110,16 @@ export default {
     },
     initializeListener(){
         Echo.private(`newComment.${this.post_id}`)
-        .listen('newComment',(e)=>{
-            // console.log(e);
+        .listen('.comment.created',(e)=>{
+
             this.comments.unshift(e.comment)
-            this.querySelectorAll('.comment').forEach(item=>{
+            setTimeout(function () {
+            document.querySelectorAll('.comment').forEach(item=>{
                 item.classList.remove('new')
             })
-            this.querySelectorAll('.comment')[0].classList.add('new')
-            console.log('listen to new comment event');
+            document.querySelectorAll('.comment')[0].classList.add('new')
+            }, 1000);
+
         })
     }
   },
@@ -134,12 +138,15 @@ export default {
 }
 .comment.new{
     background-color: #fff;
-    animation-name: newComment;
-    animation-direction: 6s;
-    animation-iteration-count: 1;
+  animation-name: newComment ;
+  -webkit-animation-name: newComment;
+  animation-duration: 15s;
+  -webkit-animation-duration: 15s;
+  animation-iteration-count: 1;
+  -webkit-animation-iteration-count: 1;
 }
 @keyframes newComment {
-    from{background-color: rgb(241, 245, 24);}
-    to{background-color: inherit;}
+from {background-color: rgb(241, 245, 24);}
+  to {background-color: inherit;}
 }
 </style>

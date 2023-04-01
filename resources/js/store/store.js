@@ -22,12 +22,14 @@ const mutations = {
     },
     [types.SET_USER](state,user){
         state.user = user;
-        // Echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${state.userToken}`;
-        Echo.private(`App.User.${state.user.id}`)
-            .notification((notification)=>{
-                console.log(notification);
-                state.notifications.unshift(notification)
-            })
+        var user_id = state.user.id;
+        Echo.connector.options.auth.headers.Authorization= `Bearer ${state.userToken}`;
+        var channel = Echo.private(`App.Models.User.${user_id}`)
+        console.log(channel);
+        channel.notification(function(notification) {
+            console.log(notification);
+            state.notifications.unshift(notification)
+        });
     },
     [types.LOGOUT](state){
         state.userToken = null;

@@ -17,3 +17,4 @@ use Inertia\Inertia;
 */
 Route::get('/',[HomeController::class,'index']);
 Route::get('/{any}', [HomeController::class,'index'])->where('any', '.*');
+Route::get('/post/{any}', [HomeController::class,'index'])->where('any', '.*');

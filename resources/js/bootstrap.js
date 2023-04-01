@@ -1,6 +1,12 @@
 import _ from 'lodash';
 window._ = _;
 
+try {
+    window.Popper = require('popper.js').default;
+    window.$ = window.jQuery = require('jquery');
+
+    require('bootstrap');
+} catch (e) {}
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -33,17 +39,18 @@ window.Pusher = Pusher;
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    // wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    // wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    // wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    // forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
-    enabledTransports: ['ws', 'wss'],
-    encrypted:true,
-    host:window.location.hostname+':8000',
-    // authEndpoint:"/api/broadcating/auth",
+    encrypted:false,
+    authEndpoint:"/api/broadcating/auth",
+    bearerToken: JSON.parse(localStorage.getItem('userToken')),
     csrfToken:token.content,
-    // disableStats: true,
+    disableStats: true,
     cluster:import.meta.env.VITE_PUSHER_APP_CLUSTER,//added this line
+    auth: {
+        headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('userToken'))}`,
+            'X-CSRF-Token': token.content,
+        }
+    },
     authorizer: (channel, options) => {
         return {
             authorize: (socketId, callback) => {
@@ -60,4 +67,8 @@ window.Echo = new Echo({
             }
         };
     },
+
+
 });
+
+

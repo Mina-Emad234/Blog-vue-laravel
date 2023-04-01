@@ -4,14 +4,14 @@ namespace App\Events;
 
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class NewComment implements ShouldBroadcast
+class NewComment implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class NewComment implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(User $user, $comment)
+    public function __construct($user, $comment)
     {
         $this->user=$user;
         $this->comment=$comment;
@@ -35,7 +35,12 @@ class NewComment implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('newComment'.$this->comment->post_id);
+        return new PrivateChannel('newComment.'.$this->comment->post_id);
 
+    }
+
+    public function broadcastAs()
+    {
+        return 'comment.created';
     }
 }

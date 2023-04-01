@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_img',
+        'is_admin',
     ];
 
     /**
@@ -60,4 +61,8 @@ class User extends Authenticatable
             get: fn ($value) => asset($value),
         );
     }
+
+    public function receivesBroadcastNotificationsOn() { return 'users.'.$this->id; }
+
+
 }

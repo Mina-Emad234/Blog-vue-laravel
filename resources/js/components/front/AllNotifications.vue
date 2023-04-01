@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" v-if="notifications.length">
                 <h3>Notifications : {{ notifications.length }}</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body" v-if="notifications.length">
                 <div class="media p-2" v-for="(n, i) in notifications" :key="i">
                     <img
                         class="mr-2"
@@ -30,7 +30,7 @@
                         >
                         <p class="m-0">
                             <i class="fa fa-clock-o mr-1"></i
-                            >{{ formatTime(n.data.commented_at) }}
+                            >{{n.data.commented_at}}
                         </p>
                     </div>
                 </div>
@@ -40,7 +40,6 @@
 </template>
 <script>
 export default {
-    emits: ['updateUnreadNotification'],
     data() {
         return {
             notifications: [],
@@ -54,17 +53,18 @@ export default {
             axios
                 .get(`api/notifications`)
                 .then((res) => {
-                    console.log(res);
-                    this.notifications = res.data;
+                    if (!res.data.msg||res.data.msg!=undefined) {
+                            this.notifications = res.data;
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
-        formatTime(date) {
-            let d = new Date(date);
-            return `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`;
-        },
+        // formatTime(date) {
+        //     let d = new Date(date);
+        //     return `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`;
+        // },
         markAsRead(n, event) {
             axios
                 .post(`api/markNotificationAsRead`, { id: n.id })
@@ -73,7 +73,7 @@ export default {
                     if (res.data.msg == "ok") {
                         event.target.classList.remove("text-danger");
                         event.target.classList.add("text-success");
-                        this.$emit('updateUnreadNotification', n.id);
+                        // this.$emit('updateUnreadNotification', n.id);
                     }
                 })
                 .catch((err) => {
