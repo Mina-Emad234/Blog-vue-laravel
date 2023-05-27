@@ -23,13 +23,33 @@ const mutations = {
     [types.SET_USER](state,user){
         state.user = user;
         var user_id = state.user.id;
-        Echo.connector.options.auth.headers.Authorization= `Bearer ${state.userToken}`;
-        var channel = Echo.private(`App.Models.User.${user_id}`)
-        console.log(channel);
-        channel.notification(function(notification) {
-            console.log(notification);
-            state.notifications.unshift(notification)
+        Echo.connector.options.auth.headers.Authorization = `Bearer ${state.userToken}`;
+
+        // Subscribe to a private channel
+        const channel = Echo.private(`users.${user_id}`);
+
+        // Handle incoming notifications
+        channel.notification(handleNotification);
+
+        // Define a function for handling notifications
+        function handleNotification(notification) {
+        // Log the notification to the console
+        console.log(notification);
+
+        // Add the notification to the state
+        state.notifications.unshift(notification);
+        }
+
+        // Handle errors
+        channel.error((error) => {
+        // Log the error to the console
+        console.error(error);
         });
+        // Echo.private(`App.Models.User.${user_id}`)
+        // .notification(function(notification) {
+        //     console.log(notification);
+        //     state.notifications.unshift(notification)
+        // });
     },
     [types.LOGOUT](state){
         state.userToken = null;
@@ -57,7 +77,7 @@ const actions = {
         axios.post(`/api/login`,payload)
         .then((res)=>{
             commit([types.SET_USER_TOKEN],res.data.token);
-            axios.get('api/user')
+            axios.get('/api/user')
             .then((res)=>{
                 commit([types.SET_USER],res.data.user);
                 // console.log(res.data.user);

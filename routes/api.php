@@ -19,10 +19,7 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
 
-});
 
 Route::get('/categories/{category:slug}/posts',[CategoryController::class,'categoryPost']);
 Route::get('/search_posts/{query}',[PostController::class,'searchPosts']);

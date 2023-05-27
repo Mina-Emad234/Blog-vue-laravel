@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^4.0.0",
+        "https-browserify": "^1.0.0",
         "laravel-echo": "^1.15.0",
         "laravel-vue-pagination": "^4.0.0",
         "vue": "^3.2.36",

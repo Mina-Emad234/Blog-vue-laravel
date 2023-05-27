@@ -17,7 +17,6 @@ import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
@@ -44,13 +43,8 @@ window.Echo = new Echo({
     bearerToken: JSON.parse(localStorage.getItem('userToken')),
     csrfToken:token.content,
     disableStats: true,
-    cluster:import.meta.env.VITE_PUSHER_APP_CLUSTER,//added this line
-    auth: {
-        headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('userToken'))}`,
-            'X-CSRF-Token': token.content,
-        }
-    },
+    forceTLS: false,
+    cluster:import.meta.env.VITE_PUSHER_APP_CLUSTER,//added this line,
     authorizer: (channel, options) => {
         return {
             authorize: (socketId, callback) => {

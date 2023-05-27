@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotifyOwner extends Notification implements ShouldBroadcastNow
+class NotifyOwner extends Notification
 {
     use Queueable;
     protected $comment_owner;
@@ -73,13 +73,12 @@ class NotifyOwner extends Notification implements ShouldBroadcastNow
     public function toBroadcast ($notifiable)
     {
         return new BroadcastMessage([
-        'notification_id' => 1234,
-        'notification_type' => 'example_notification',
-        "data"=>[
-            "comment_owner"=>$this->comment_owner,
-            "commented_at"=>$this->commented_at,
-            "post"=>$this->post
-        ]]);
+            "data"=>[
+                "comment_owner"=>$this->comment_owner,
+                "commented_at"=>$this->commented_at,
+                "post"=>$this->post
+            ],
+        ]);
     }
 
 }

@@ -65,6 +65,9 @@ services:
     user: node
     entrypoint: ["npm"]
     working_dir: /var/www/html
+    command: laravel-echo-server start
+    ports:
+      - "6001:6001"
     networks:
       - app-network
 

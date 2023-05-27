@@ -13,7 +13,7 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
- 
+
     <!-- Custom styles for this template -->
     <link href="{{ asset('assets/css/added_style.css') }}" rel="stylesheet">
 
@@ -25,6 +25,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <script src="{{asset('js/app.js')}}" defer></script>
+	@vite('resources/js/app.js')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -39,13 +41,11 @@
         {{-- <x-layouts.footer /> --}}
 
 
-	@vite('resources/js/app.js')
     {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
     <!--modals-->
     <!-- Bootstrap core JavaScript -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{asset('js/app.js')}}" defer ></script>
     <script>
         $(document).ready(function() {
             $('.switch-tologin-modal').on('click', function() {
