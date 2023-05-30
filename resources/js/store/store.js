@@ -8,6 +8,7 @@ const types = {
     SET_USER:'SET_USER',
     LOGOUT:'LOGOUT',
     EDIT_POST:'EDIT_POST',
+    SET_UNREAD_NOTIFICATIONS:'SET_UNREAD_NOTIFICATIONS',
 };
 
 const mutations = {
@@ -60,6 +61,10 @@ const mutations = {
         state.editedPost = post;
     },
 
+    [types.SET_UNREAD_NOTIFICATIONS](state,notifications){
+        state.notifications = notifications;
+    },
+
 };
 
 const actions = {
@@ -72,6 +77,19 @@ const actions = {
         .catch((err)=>{
             console.log(err);
         })
+    },
+
+    unreadNotifications({commit}){
+        axios
+        .get(`api/unread-notifications`)
+        .then((res) => {
+            // this.$store.state.notifications = res.data;
+            commit([types.SET_UNREAD_NOTIFICATIONS],res.data);
+
+        })
+        .catch((err) => {
+        console.log(err);
+        });
     },
     loginUser({commit},payload){
         axios.post(`/api/login`,payload)

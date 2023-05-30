@@ -40,6 +40,7 @@
 </template>
 <script>
 export default {
+    emits: ["updateUnreadNotification"],
     data() {
         return {
             notifications: [],
@@ -73,8 +74,10 @@ export default {
                     if (res.data.msg == "ok") {
                         event.target.classList.remove("text-danger");
                         event.target.classList.add("text-success");
-                        // this.$emit('updateUnreadNotification', n.id);
-                    }
+                         this.$store.dispatch('unreadNotifications')
+
+
+                        }
                 })
                 .catch((err) => {
                     console.log(err);

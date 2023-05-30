@@ -42,11 +42,13 @@ export default {
   mounted() {
       this.getUnreadNotifications();
   },
+
   computed: {
     notifications() {
       return this.$store.state.notifications;
 
     },
+
   },
   methods: {
     // formatTime(date){
@@ -54,20 +56,18 @@ export default {
     //     return `${d.getFullYear()}/${d.getMonth()}/${d.getDate()}`
     // },
     getUnreadNotifications() {
-      axios
-        .get(`api/unread-notifications`)
-        .then((res) => {
-            this.$store.state.notifications = res.data;
+        this.$store.dispatch('unreadNotifications')
+    //   axios
+    //     .get(`api/unread-notifications`)
+    //     .then((res) => {
+    //         this.$store.state.notifications = res.data;
 
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
     },
-    // deleteNotification(id){
-    //     console.log(id);
-    //     return this.getUnreadNotifications();
-    // }
+
   },
 };
 </script>
